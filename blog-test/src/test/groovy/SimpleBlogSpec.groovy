@@ -1,4 +1,3 @@
-import geb.Browser
 import geb.spock.GebReportingSpec
 
 /**
@@ -7,8 +6,6 @@ import geb.spock.GebReportingSpec
 class SimpleBlogSpec extends GebReportingSpec {
 
     def 'Any user should access the blog homepage'() {
-        Browser browser = new Browser()
-
         when: 'User accesses the blog homepage'
         to BlogPage
 

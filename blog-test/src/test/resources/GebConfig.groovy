@@ -9,5 +9,3 @@ waiting {
 reportsDir = "target/geb-reports"
 
 driver = { new FirefoxDriver() }
-
-// baseUrl = "http://gebish.org"
