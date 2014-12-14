@@ -10,13 +10,11 @@ class SimpleBlogSpec extends GebReportingSpec {
         Browser browser = new Browser()
 
         when: 'User accesses the blog homepage'
-        browser.go('http://localhost:8082/')
+        to BlogPage
 
         then: 'User should see the blog posts'
-        Thread.sleep(1000)
-        def title = browser.$('body').$('h1').text()
-        assert title == 'My Blog'
-        assert browser.$('h2').size() > 1
+        at BlogPage
+        assert hasPosts()
     }
 
     def 'Visitors should be allowed to register'() {
