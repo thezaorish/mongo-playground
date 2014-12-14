@@ -41,7 +41,6 @@ public class UserDAO {
 
     // validates that username is unique and insert into db
     public boolean addUser(String username, String password, String email) {
-
         String passwordHash = makePasswordHash(password, Integer.toString(random.nextInt()));
 
         BasicDBObject user = new BasicDBObject();

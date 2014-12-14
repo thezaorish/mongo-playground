@@ -1,9 +1,20 @@
 import geb.spock.GebReportingSpec
+import spock.lang.Shared
 
 /**
  * Created by zaorish on 14/12/14.
  */
 class SimpleBlogSpec extends GebReportingSpec {
+
+    @Shared MongoDBAccessor mongoDBAccessor
+
+    def setupSpec() {
+        mongoDBAccessor = new MongoDBAccessor()
+    }
+
+    def cleanupSpec() {
+        mongoDBAccessor.close()
+    }
 
     def 'Any user should access the blog homepage'() {
         when: 'User accesses the blog homepage'
@@ -23,11 +34,15 @@ class SimpleBlogSpec extends GebReportingSpec {
         at SignupPage
 
         when: 'He fills in the form'
-        signup(now, 'pass', 'pass', "$now@email.com")
+        def email = "$now@email.com"
+        signup(now, 'pass', 'pass', email)
 
         then: 'He should be redirected to the welcome page'
         at WelcomePage
         assert welcomed(now)
+
+        and: 'The user entry is added to the database'
+        assert mongoDBAccessor.verifyUserExists(now, email)
     }
 
 }
