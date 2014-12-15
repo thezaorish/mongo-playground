@@ -27,23 +27,27 @@ class SimpleBlogSpec extends GebReportingSpec {
     }
 
     def 'Visitors should be allowed to register'() {
-        def now = new Date().time
-        println 'going to sign up user ' + now
+        def user = new Date().time
+        def email = "$user@email.com"
+        println 'going to sign up user ' + user
 
         given: 'The visitor wants to sign up'
         to SignupPage
         at SignupPage
 
         when: 'He fills in the form'
-        def email = "$now@email.com"
-        signup(now, 'pass', 'pass', email)
+        signup(user, 'pass', 'pass', email)
 
         then: 'He should be redirected to the welcome page'
         at WelcomePage
-        assert welcomed(now)
+        assert welcomed(user)
 
         and: 'The user entry is added to the database'
-        assert mongoDBAccessor.verifyUserExists(now, email)
+        assert mongoDBAccessor.verifyUserExists(user, email)
+
+        cleanup: 'Remove the user entry from database'
+        mongoDBAccessor.deleteUser(user)
+        assert mongoDBAccessor.verifyUserExists(user, email) == null
     }
 
 }
