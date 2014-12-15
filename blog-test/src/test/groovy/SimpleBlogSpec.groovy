@@ -3,6 +3,7 @@ import spock.lang.Shared
 
 /**
  * Created by zaorish on 14/12/14.
+ * read more https://code.google.com/p/spock/wiki/SpockBasics
  */
 class SimpleBlogSpec extends GebReportingSpec {
 
