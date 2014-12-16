@@ -6,6 +6,8 @@ waiting {
     timeout = 2
 }
 
+atCheckWaiting = true
+
 reportsDir = "target/geb-reports"
 
 driver = { new FirefoxDriver() }

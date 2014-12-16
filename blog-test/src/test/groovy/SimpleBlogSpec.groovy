@@ -29,7 +29,7 @@ class SimpleBlogSpec extends GebReportingSpec {
     def 'Visitors should be allowed to register'() {
         def user = new Date().time
         def email = "$user@email.com"
-        println 'going to sign up user ' + user
+        println "going to sign up user $user"
 
         given: 'The visitor wants to sign up'
         to SignupPage
@@ -48,6 +48,42 @@ class SimpleBlogSpec extends GebReportingSpec {
         cleanup: 'Remove the user entry from database'
         mongoDBAccessor.deleteUser(user)
         assert mongoDBAccessor.verifyUserExists(user, email) == null
+    }
+
+    def 'Registered users should be allowed to create new posts'() {
+        given: 'The user is signed in'
+        def user = 'poster'
+        def email = 'poster@blog.com'
+        signInUser(user, email)
+
+        when: 'He chooses to create a new blog post'
+        to NewPostPage
+        at NewPostPage
+        def subject = 'page objects are awesome'
+        def body = 'page objects really improve the readability of the tests'
+        def tags = 'pop, awesome, test'
+        createPost(subject, body, tags)
+
+        then: 'The blog post should be saved to the database'
+        at BlogPostPage
+        assert mongoDBAccessor.verifyPostExists(user, subject, body, tags)
+
+        cleanup: 'Remove the post and the user entry from database'
+        mongoDBAccessor.deletePost(subject)
+        assert mongoDBAccessor.verifyPostExists(user, subject, body, tags) == null
+        mongoDBAccessor.deleteUser(user)
+        assert mongoDBAccessor.verifyUserExists(user, email) == null
+    }
+
+    def signInUser(user, email) {
+        println "going to sign up user $user"
+
+        to SignupPage
+        at SignupPage
+
+        signup(user, 'pass', 'pass', email)
+        at WelcomePage
+        assert mongoDBAccessor.verifyUserExists(user, email)
     }
 
 }
