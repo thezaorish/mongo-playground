@@ -75,6 +75,28 @@ class SimpleBlogSpec extends GebReportingSpec {
         assert mongoDBAccessor.verifyUserExists(user, email) == null
     }
 
+    def 'Registered users should be allowed to comment on posts'() {
+        given: 'The user is signed in'
+        def user = 'commenter'
+        def email = 'commenter@blog.com'
+        signInUser(user, email)
+
+        when: 'He chooses to comment on a blog post'
+        to BlogPage
+        def permalink = navigateToBlogPost(1)
+        at BlogPostPage
+        def body = 'this is the post I am commenting on'
+        createComment(user, email, body)
+
+        then: 'His comment should be saved to the database'
+        assert mongoDBAccessor.verifyCommentExists(user, permalink, body)
+
+        cleanup: 'Remove the comment and the user entry from database'
+        mongoDBAccessor.deleteComment(user, email, body, permalink)
+        mongoDBAccessor.deleteUser(user)
+        assert mongoDBAccessor.verifyUserExists(user, email) == null
+    }
+
     def signInUser(user, email) {
         println "going to sign up user $user"
 

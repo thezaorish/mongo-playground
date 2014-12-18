@@ -44,12 +44,27 @@ class MongoDBAccessor {
         post
     }
 
+    def verifyCommentExists(user, permalink, body) {
+        DBObject post = postsCollection.findOne(new BasicDBObject('permalink', permalink.toString()).append('comments.author', user.toString()).append('comments.body', body.toString()))
+        post
+    }
+
     def deleteUser(username) {
         WriteResult result = usersCollection.remove(new BasicDBObject('_id', username.toString()))
     }
 
     def deletePost(subject) {
         WriteResult result = postsCollection.remove(new BasicDBObject('title', subject.toString()))
+    }
+
+    def deleteComment(user, email, body, permalink) {
+        BasicDBObject comment = new BasicDBObject('author', user.toString()).append('body', body.toString());
+        if (email) {
+            comment.append('email', email.toString());
+        }
+
+        WriteResult result = postsCollection.update(new BasicDBObject('permalink', permalink),
+                new BasicDBObject('$pop', new BasicDBObject('comments', comment)), false, false);
     }
 
     def close() {

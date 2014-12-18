@@ -13,4 +13,11 @@ class BlogPage extends Page {
         return $('h2').size() > 1
     }
 
+    def navigateToBlogPost(pos) {
+        String fullUrl = $("h2", pos - 1).find('a').@href
+        def permalink = fullUrl.substring(fullUrl.lastIndexOf('/') + 1, fullUrl.length())
+        browser.go(fullUrl)
+        permalink
+    }
+
 }
