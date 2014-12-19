@@ -1,3 +1,5 @@
+package page
+
 import geb.Page
 
 /**

@@ -1,4 +1,9 @@
 import geb.spock.GebReportingSpec
+import page.BlogPage
+import page.BlogPostPage
+import page.NewPostPage
+import page.SignupPage
+import page.WelcomePage
 import spock.lang.Shared
 
 /**
