@@ -7,16 +7,11 @@ import com.mongodb.MongoClientURI;
 import freemarker.template.Configuration;
 import freemarker.template.SimpleHash;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.apache.commons.lang3.StringEscapeUtils;
 import spark.Request;
-import spark.Response;
-import spark.Route;
-
 import javax.servlet.http.Cookie;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
